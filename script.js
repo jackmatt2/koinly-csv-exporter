@@ -7,7 +7,7 @@
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
-    const fetchPage = async (pageNumber) => {
+    const fetchHeaders = () => {
         var headers = new Headers();
         headers.append("authority", "api.koinly.io");
         headers.append("accept", "application/json, text/plain, */*");
@@ -24,10 +24,29 @@
         headers.append("user-agent", navigator.userAgent);
         headers.append("x-auth-token", getCookie('API_KEY'));
         headers.append("x-portfolio-token", getCookie('PORTFOLIO_ID'));
-        
-        var requestOptions = {
+        return headers;
+    }
+
+    const fetchSession = async () => {
+        const requestOptions = {
             method: 'GET',
-            headers: headers,
+            headers: fetchHeaders(),
+            redirect: 'follow'
+        };
+        
+        try {
+            const response = await fetch('https://api.koinly.io/api/sessions', requestOptions);
+            return response.json();
+        } catch(err) {
+            console.error(err)
+            throw new Error("Fetch session failed")
+        }
+    }
+
+    const fetchPage = async (pageNumber) => {
+        const requestOptions = {
+            method: 'GET',
+            headers: fetchHeaders(),
             redirect: 'follow'
         };
         
@@ -53,7 +72,7 @@
         return transactions;
     }
 
-    const toCSVFile = (transactions) => {  
+    const toCSVFile = (baseCurrency, transactions) => {  
    
         // Headings
         // Representing Koinly Spreadsheet (https://docs.google.com/spreadsheets/d/1dESkilY70aLlo18P3wqXR_PX1svNyAbkYiAk2tBPJng/edit#gid=0)
@@ -66,10 +85,11 @@
            'Fee Amount',
            'Fee Currency',
            'Net Worth Amount',
-           //'Net Worth Currency',
+           'Net Worth Currency',
            'Label',
            'Description',
            'TxHash',
+           // Add extra headers as necessary (ensure you also update "row" below)
         ]
         
         transactionRows = transactions.map((t) => { 
@@ -82,10 +102,11 @@
                t.fee ? t.fee.amount : '',
                t.fee ? t.fee.currency.symbol : '',
                t.net_value,
-               //'', // depends on settings in Koinly
+               baseCurrency,
                t.type,
                t.description,
                t.txhash,
+               // Add extra fields as necessary (ensure you also update "headings" above)
            ]
            return row.join(',');  
         });
@@ -105,9 +126,11 @@
     }
 
     const run = async () => {
+        const session = await fetchSession()
+        const baseCurrency = session.portfolios[0].base_currency.symbol;
         const transactions = await getAllTransactions()
-        console.log(transactions)
-        toCSVFile(transactions)
+        console.log('Your Koinly Transactions\n', transactions)
+        toCSVFile(baseCurrency, transactions)
     }
 
     run()
