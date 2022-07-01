@@ -8,22 +8,22 @@
     }
 
     const fetchHeaders = () => {
-        var headers = new Headers();
-        headers.append("authority", "api.koinly.io");
-        headers.append("accept", "application/json, text/plain, */*");
-        headers.append("accept-language", "en-GB,en-US;q=0.9,en;q=0.8");
-        headers.append("access-control-allow-credentials", "true");
-        headers.append("caches-requests", "1");
-        headers.append("cookie", document.cookie);
-        headers.append("origin", "https://app.koinly.io");
-        headers.append("referer", "https://app.koinly.io/");
-        headers.append("sec-fetch-dest", "empty");
-        headers.append("sec-fetch-mode", "cors");
-        headers.append("sec-fetch-site", "same-site");
-        headers.append("sec-gpc", "1");
-        headers.append("user-agent", navigator.userAgent);
-        headers.append("x-auth-token", getCookie('API_KEY'));
-        headers.append("x-portfolio-token", getCookie('PORTFOLIO_ID'));
+        const headers = new Headers();
+        headers.append('authority', 'api.koinly.io');
+        headers.append('accept', 'application/json, text/plain, */*');
+        headers.append('accept-language', 'en-GB,en-US;q=0.9,en;q=0.8');
+        headers.append('access-control-allow-credentials', 'true');
+        headers.append('caches-requests', '1');
+        headers.append('cookie', document.cookie);
+        headers.append('origin', 'https://app.koinly.io');
+        headers.append('referer', 'https://app.koinly.io/');
+        headers.append('sec-fetch-dest', 'empty');
+        headers.append('sec-fetch-mode', 'cors');
+        headers.append('sec-fetch-site', 'same-site');
+        headers.append('sec-gpc', '1');
+        headers.append('user-agent', navigator.userAgent);
+        headers.append('x-auth-token', getCookie('API_KEY'));
+        headers.append('x-portfolio-token', getCookie('PORTFOLIO_ID'));
         return headers;
     }
 
@@ -39,7 +39,7 @@
             return response.json();
         } catch(err) {
             console.error(err)
-            throw new Error("Fetch session failed")
+            throw new Error('Fetch session failed')
         }
     }
 
@@ -55,7 +55,7 @@
             return response.json();
         } catch(err) {
             console.error(err)
-            throw new Error("Fetch failed for page=" + pageNumber)
+            throw new Error(`Fetch failed for page=${pageNumber}`)
         }
     }
 
@@ -76,7 +76,7 @@
    
         // Headings
         // Representing Koinly Spreadsheet (https://docs.google.com/spreadsheets/d/1dESkilY70aLlo18P3wqXR_PX1svNyAbkYiAk2tBPJng/edit#gid=0)
-        var headings = [
+        const headings = [
            'Date',
            'Sent Amount',
            'Sent Currency',
@@ -89,7 +89,7 @@
            'Label',
            'Description',
            'TxHash',
-           // Add extra headers as necessary (ensure you also update "row" below)
+           // EXTRA_HEADERS: Add extra headers as necessary (ensure you also update "row" below)
         ]
         
         transactionRows = transactions.map((t) => { 
@@ -106,7 +106,7 @@
                t.type,
                t.description,
                t.txhash,
-               // Add extra fields as necessary (ensure you also update "headings" above)
+               // FIELDS_HEADERS: Add extra fields as necessary (ensure you also update "headings" above)
            ]
            return row.join(',');  
         });
@@ -115,10 +115,8 @@
            headings.join(','), 
            ...transactionRows
        ].join('\n');
-       
-        document.write(csv);
          
-        var hiddenElement = document.createElement('a');  
+        const hiddenElement = document.createElement('a');  
         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
         hiddenElement.target = '_blank';
         hiddenElement.download = 'Koinly Transactions.csv';  
