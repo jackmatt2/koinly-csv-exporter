@@ -92,7 +92,7 @@
         ]
         
         transactionRows = transactions.map((t) => { 
-           row = [
+           const row = [
                t.date,
                t.from ? t.from.amount : '',
                t.from ? t.from.currency.symbol : '',
@@ -110,16 +110,16 @@
            return row.join(',');  
         });
    
-       const csv = [
-           headings.join(','), 
-           ...transactionRows
-       ].join('\n');
+        const csv = [
+            headings.join(','), 
+            ...transactionRows
+        ].join('\n');
          
-        const hiddenElement = document.createElement('a');  
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
+        const hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
         hiddenElement.target = '_blank';
-        hiddenElement.download = 'Koinly Transactions.csv';  
-        hiddenElement.click();  
+        hiddenElement.download = 'Koinly Transactions.csv';
+        hiddenElement.click();
     }
 
     const run = async () => {
