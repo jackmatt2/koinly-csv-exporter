@@ -68,8 +68,7 @@
         }
         const remainingPages = await Promise.all(promises);
         const allPages = [firstPage, ...remainingPages];
-        const transactions = allPages.flatMap(it => it.transactions);
-        return transactions;
+        return allPages.flatMap(it => it.transactions);
     }
 
     const toCSVFile = (baseCurrency, transactions) => {  
@@ -106,7 +105,7 @@
                t.type,
                t.description,
                t.txhash,
-               // FIELDS_HEADERS: Add extra fields as necessary (ensure you also update "headings" above)
+               // EXTRA_FIELDS: Add extra fields as necessary (ensure you also update "headings" above)
            ]
            return row.join(',');  
         });
