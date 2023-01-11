@@ -94,7 +94,7 @@
            'Net Worth Currency',
            'Label',
            'Description',
-           'TxHash',
+           'TxHash'
            // EXTRA_HEADERS: Add extra headers as necessary (ensure you also update "row" below)
         ]
         
@@ -111,7 +111,7 @@
                baseCurrency,
                t.type,
                t.description,
-               t.txhash,
+               t.txhash
                // EXTRA_FIELDS: Add extra fields as necessary (ensure you also update "headings" above)
            ]
            return row.join(',');  
